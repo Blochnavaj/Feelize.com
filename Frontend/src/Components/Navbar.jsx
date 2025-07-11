@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link as ScrollLink } from 'react-scroll';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link as RouterLink, useNavigate } from 'react-router-dom';
 import logo from '../assets/LOGO_FEELIZE.png';
 
 function Navbar() {
@@ -10,6 +10,7 @@ function Navbar() {
   const [showServices, setShowServices] = useState(false);
   const location = useLocation();
   const isOnHomePage = location.pathname === '/';
+  const navigate = useNavigate();
 
   const NavLink = [
     { name: 'About us', id: 'about-us' },
@@ -51,6 +52,19 @@ function Navbar() {
     }
   };
 
+  // Helper to handle navigation to home and scroll to section
+  const handleNavToSection = (id) => (e) => {
+    e.preventDefault();
+    navigate(`/#${id}`);
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 50);
+    closeMenu();
+  };
+
   return (
     <>
       {/* Top Navbar */}
@@ -81,12 +95,13 @@ function Navbar() {
                     {link.name}
                   </ScrollLink>
                 ) : (
-                  <a
-                    href={`/#${link.id}`}
+                  <RouterLink
+                    to={`/#${link.id}`}
                     className="hover:text-red-600"
+                    onClick={handleNavToSection(link.id)}
                   >
                     {link.name}
-                  </a>
+                  </RouterLink>
                 )}
               </li>
             ))}
@@ -142,13 +157,13 @@ function Navbar() {
                       {link.name}
                     </ScrollLink>
                   ) : (
-                    <a
-                      href={`/#${link.id}`}
-                      onClick={closeMenu}
+                    <RouterLink
+                      to={`/#${link.id}`}
+                      onClick={handleNavToSection(link.id)}
                       className="text-black text-lg font-medium hover:text-red-600 block"
                     >
                       {link.name}
-                    </a>
+                    </RouterLink>
                   )}
                 </li>
               ))}
