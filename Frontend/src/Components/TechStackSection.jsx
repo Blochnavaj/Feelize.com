@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, transform, useAnimation } from "framer-motion";
 import {
   SiReact,
   SiNextdotjs,
@@ -12,7 +12,7 @@ import {
   SiMongodb,
   SiPostgresql,
   SiFirebase,
-   
+
   SiWordpress,
   SiTypescript,
   SiBootstrap,
@@ -21,6 +21,7 @@ import {
   SiMysql
 } from "react-icons/si";
 import { FaAws } from "react-icons/fa"; // correct and available
+import { useEffect } from "react";
 
 
 const stacks = [
@@ -70,6 +71,7 @@ const stacks = [
   },
 ];
 
+
 const TechStackSection = () => {
   return (
     <section className="bg-white py-24 px-6" id="Technologies">
@@ -82,27 +84,50 @@ const TechStackSection = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 max-w-7xl mx-auto">
+      <div className="w-full px-8 md:px-16 space-y-10">
         {stacks.map((stack, index) => (
           <motion.div
             key={index}
-            whileHover={{ scale: 1.05 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 40 }}
-            transition={{ duration: 0.5, delay: index * 0.2 }}
-            className="bg-gray-50 border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all"
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ amount: 1 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            // whileHover={{ scale: 1.05 }}
+            className="bg-gray-50 border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-xl"
           >
             <h3 className="text-2xl font-semibold text-purple-700 mb-6 text-center">
               {stack.title}
             </h3>
-            <ul className="space-y-4">
+
+            <ul className="grid grid-cols-2 sm:grid-cols-3 gap-6 md:flex md:flex-wrap md:justify-around w-full">
               {stack.items.map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-gray-800 text-md">
-                  <span className="text-2xl text-purple-500">{item.icon}</span>
-                  <span>{item.name}</span>
+                <li key={i} className="flex flex-col items-center gap-3 text-gray-800">
+
+                  <motion.span
+                    animate={{ scale: [1, 1.1, 1] }}
+                    whileHover={{ rotate: 360 }}
+                    transition={{
+
+                      scale: {
+                        duration: 1.5,
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        ease: "easeInOut",
+                      },
+                      rotate: {
+                        duration: 0.3,
+                        ease: "easeInOut",
+                      }
+                    }}
+                    className="text-3xl text-purple-500">
+                    {item.icon}
+                  </motion.span>
+                  <span className="text-xl font-medium">{item.name}</span>
+
                 </li>
               ))}
             </ul>
+
           </motion.div>
         ))}
       </div>
